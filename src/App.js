@@ -8,6 +8,8 @@ import Login from './Login';
 import Register from './Register';
 import ForgotPassword from './ForgotPassword';
 
+const API_URL = 'https://red-product-backend-qqo1.onrender.com';
+
 function App() {
   const [authPage, setAuthPage] = useState('login');
   const [user, setUser] = useState(() => {
@@ -24,7 +26,7 @@ function App() {
 
   const fetchHotels = useCallback(() => {
     setLoading(true);
-    axios.get('http://127.0.0.1:8000/api/hotels')
+    axios.get(`${API_URL}/api/hotels`)
       .then(response => {
         setHotels(response.data);
         setLoading(false);
@@ -47,7 +49,7 @@ function App() {
   const handleDelete = async (id) => {
     if (!window.confirm("Supprimer cet hôtel ?")) return;
     try {
-      await axios.delete(`http://127.0.0.1:8000/api/hotels/${id}`);
+      await axios.delete(`${API_URL}/api/hotels/${id}`);
       fetchHotels();
     } catch (err) {
       console.error(err);
@@ -67,7 +69,6 @@ function App() {
     h.address.toLowerCase().includes(search.toLowerCase())
   );
 
-  // Pas connecté → afficher les pages d'authentification
   if (!user) {
     if (authPage === 'register') {
       return <Register onRegister={setUser} onSwitchToLogin={() => setAuthPage('login')} />;
@@ -84,8 +85,7 @@ function App() {
     );
   }
 
-  // Connecté → afficher l'application
-   return (
+  return (
     <div className="flex bg-gray-100 min-h-screen">
       <Sidebar currentPage={page} onNavigate={setPage} user={user} onLogout={handleLogout} />
 

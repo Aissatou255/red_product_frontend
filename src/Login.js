@@ -2,6 +2,8 @@ import Logo from './Logo';
 import { useState } from 'react';
 import axios from 'axios';
 
+const API_URL = 'https://red-product-backend-qqo1.onrender.com';
+
 function Login({ onLogin, onSwitchToRegister, onSwitchToForgot }) {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
@@ -13,7 +15,7 @@ function Login({ onLogin, onSwitchToRegister, onSwitchToForgot }) {
     setLoading(true);
     setError(null);
     try {
-      const res = await axios.post('http://127.0.0.1:8000/api/login', { email, password });
+      const res = await axios.post(`${API_URL}/api/login`, { email, password });
       localStorage.setItem('token', res.data.token);
       localStorage.setItem('user', JSON.stringify(res.data.user));
       onLogin(res.data.user);

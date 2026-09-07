@@ -3,6 +3,7 @@ import axios from 'axios';
 
 const CLOUD_NAME = 'iyp1ap9k';
 const UPLOAD_PRESET = 'hotel_photo';
+const API_URL = 'https://red-product-backend-qqo1.onrender.com';
 
 function AddHotel({ onHotelAdded, editingHotel }) {
   const [formData, setFormData] = useState({
@@ -55,12 +56,12 @@ function AddHotel({ onHotelAdded, editingHotel }) {
       }
 
       if (editingHotel) {
-        await axios.put(`http://127.0.0.1:8000/api/hotels/${editingHotel.id}`, {
+        await axios.put(`${API_URL}/api/hotels/${editingHotel.id}`, {
           ...formData,
           photo_url,
         });
       } else {
-        await axios.post('http://127.0.0.1:8000/api/hotels', {
+        await axios.post(`${API_URL}/api/hotels`, {
           ...formData,
           photo_url,
         });

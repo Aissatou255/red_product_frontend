@@ -2,6 +2,8 @@ import Logo from './Logo';
 import { useState } from 'react';
 import axios from 'axios';
 
+const API_URL = 'https://red-product-backend-qqo1.onrender.com';
+
 function Register({ onRegister, onSwitchToLogin }) {
   const [name, setName] = useState('');
   const [email, setEmail] = useState('');
@@ -14,7 +16,7 @@ function Register({ onRegister, onSwitchToLogin }) {
     setLoading(true);
     setError(null);
     try {
-      const res = await axios.post('http://127.0.0.1:8000/api/register', { name, email, password });
+      const res = await axios.post(`${API_URL}/api/register`, { name, email, password });
       localStorage.setItem('token', res.data.token);
       localStorage.setItem('user', JSON.stringify(res.data.user));
       onRegister(res.data.user);
