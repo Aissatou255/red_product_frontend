@@ -87,7 +87,7 @@ function App() {
   }
 
   return (
-    <div className="flex bg-gray-100 min-h-screen">
+    <div className="flex min-h-screen">
       <Sidebar
         currentPage={page}
         onNavigate={setPage}
@@ -97,7 +97,7 @@ function App() {
         onClose={() => setSidebarOpen(false)}
       />
 
-      <div className="flex-1 min-w-0">
+      <div className="flex-1 min-w-0 bg-gray-100">
         <Topbar
           title={page === 'dashboard' ? 'Dashboard' : 'Liste des hôtels'}
           searchValue={search}
