@@ -23,6 +23,7 @@ function App() {
   const [showForm, setShowForm] = useState(false);
   const [editingHotel, setEditingHotel] = useState(null);
   const [search, setSearch] = useState('');
+  const [sidebarOpen, setSidebarOpen] = useState(false);
 
   const fetchHotels = useCallback(() => {
     setLoading(true);
@@ -87,28 +88,36 @@ function App() {
 
   return (
     <div className="flex bg-gray-100 min-h-screen">
-      <Sidebar currentPage={page} onNavigate={setPage} user={user} onLogout={handleLogout} />
+      <Sidebar
+        currentPage={page}
+        onNavigate={setPage}
+        user={user}
+        onLogout={handleLogout}
+        open={sidebarOpen}
+        onClose={() => setSidebarOpen(false)}
+      />
 
-      <div className="flex-1">
+      <div className="flex-1 min-w-0">
         <Topbar
           title={page === 'dashboard' ? 'Dashboard' : 'Liste des hôtels'}
           searchValue={search}
           onSearchChange={setSearch}
           showSearch={page === 'hotels'}
           onLogout={handleLogout}
+          onMenuClick={() => setSidebarOpen(true)}
         />
 
         {page === 'dashboard' && <Dashboard />}
 
         {page === 'hotels' && (
-          <div className="p-6 max-w-6xl mx-auto">
-            <div className="flex justify-between items-center mb-6">
+          <div className="p-4 sm:p-6 max-w-6xl mx-auto">
+            <div className="flex flex-col sm:flex-row sm:justify-between sm:items-center gap-3 mb-6">
               <div>
                 <p className="text-sm text-gray-500">Hôtels {filteredHotels.length}</p>
               </div>
               <button
                 onClick={() => { setShowForm(!showForm); setEditingHotel(null); }}
-                className="bg-gray-800 text-white px-4 py-2 rounded hover:bg-gray-700"
+                className="bg-gray-800 text-white px-4 py-2 rounded hover:bg-gray-700 w-full sm:w-auto"
               >
                 {showForm ? 'Fermer' : '+ Créer un nouvel hôtel'}
               </button>
