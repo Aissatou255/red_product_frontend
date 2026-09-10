@@ -33,19 +33,27 @@ function Sidebar({ currentPage, onNavigate, user, onLogout, open, onClose }) {
         <nav className="flex-1 px-2 space-y-1">
           <button
             onClick={() => { onNavigate('dashboard'); onClose(); }}
-            className={`w-full flex items-center gap-3 text-left px-3 py-2 rounded text-sm ${currentPage === 'dashboard' ? 'bg-neutral-600' : 'hover:bg-neutral-600'}`}
+            className={`w-full flex items-center gap-3 text-left pl-3 pr-3 py-2 text-sm border-l-4 ${
+              currentPage === 'dashboard'
+                ? 'bg-neutral-600 border-white'
+                : 'border-transparent hover:bg-neutral-600'
+            }`}
           >
             <Icon>
-              <rect x="3" y="3" width="7" height="9" rx="1" />
-              <rect x="14" y="3" width="7" height="5" rx="1" />
-              <rect x="14" y="12" width="7" height="9" rx="1" />
-              <rect x="3" y="16" width="7" height="5" rx="1" />
+              <rect x="3" y="3" width="8" height="8" rx="1" />
+              <rect x="13" y="3" width="8" height="8" rx="1" />
+              <rect x="3" y="13" width="8" height="8" rx="1" />
+              <rect x="13" y="13" width="8" height="8" rx="1" />
             </Icon>
             Dashboard
           </button>
           <button
             onClick={() => { onNavigate('hotels'); onClose(); }}
-            className={`w-full flex items-center gap-3 text-left px-3 py-2 rounded text-sm ${currentPage === 'hotels' ? 'bg-neutral-600' : 'hover:bg-neutral-600'}`}
+            className={`w-full flex items-center gap-3 text-left pl-3 pr-3 py-2 text-sm border-l-4 ${
+              currentPage === 'hotels'
+                ? 'bg-neutral-600 border-white'
+                : 'border-transparent hover:bg-neutral-600'
+            }`}
           >
             <Icon>
               <rect x="3" y="3" width="18" height="11" rx="1" />
