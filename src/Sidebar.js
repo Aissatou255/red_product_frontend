@@ -1,17 +1,12 @@
 import Logo from './Logo';
 
-function Icon({ path, className = "w-4 h-4" }) {
+function Icon({ children, className = "w-4 h-4" }) {
   return (
-    <svg viewBox="0 0 24 24" fill="currentColor" className={className}>
-      <path d={path} />
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className={className}>
+      {children}
     </svg>
   );
 }
-
-const icons = {
-  dashboard: "M3 3h8v8H3V3zm10 0h8v5h-8V3zM3 13h8v8H3v-8zm10 3h8v5h-8v-5z",
-  hotel: "M7 13c1.66 0 3-1.34 3-3S8.66 7 7 7s-3 1.34-3 3 1.34 3 3 3zm12-6h-8v7H3V5H1v15h2v-3h18v3h2v-9c0-2.21-1.79-4-4-4z",
-};
 
 function Sidebar({ currentPage, onNavigate, user, onLogout, open, onClose }) {
   return (
@@ -40,14 +35,26 @@ function Sidebar({ currentPage, onNavigate, user, onLogout, open, onClose }) {
             onClick={() => { onNavigate('dashboard'); onClose(); }}
             className={`w-full flex items-center gap-3 text-left px-3 py-2 rounded text-sm ${currentPage === 'dashboard' ? 'bg-neutral-600' : 'hover:bg-neutral-600'}`}
           >
-            <Icon path={icons.dashboard} />
+            <Icon>
+              <rect x="3" y="3" width="7" height="9" rx="1" />
+              <rect x="14" y="3" width="7" height="5" rx="1" />
+              <rect x="14" y="12" width="7" height="9" rx="1" />
+              <rect x="3" y="16" width="7" height="5" rx="1" />
+            </Icon>
             Dashboard
           </button>
           <button
             onClick={() => { onNavigate('hotels'); onClose(); }}
             className={`w-full flex items-center gap-3 text-left px-3 py-2 rounded text-sm ${currentPage === 'hotels' ? 'bg-neutral-600' : 'hover:bg-neutral-600'}`}
           >
-            <Icon path={icons.hotel} />
+            <Icon>
+              <rect x="3" y="3" width="18" height="11" rx="1" />
+              <line x1="7" y1="7" x2="13" y2="7" />
+              <rect x="16" y="6" width="2" height="2" />
+              <rect x="16" y="9" width="2" height="2" />
+              <circle cx="12" cy="15" r="2" />
+              <path d="M9 21c0-2.5 1.5-4 3-4s3 1.5 3 4" />
+            </Icon>
             Liste des hôtels
           </button>
         </nav>
@@ -60,7 +67,13 @@ function Sidebar({ currentPage, onNavigate, user, onLogout, open, onClose }) {
               <span className="w-2 h-2 bg-green-400 rounded-full inline-block"></span> en ligne
             </div>
           </div>
-          <button onClick={onLogout} className="text-gray-400 hover:text-white text-xs" title="Déconnexion">⏻</button>
+          <button onClick={onLogout} className="text-gray-400 hover:text-white" title="Déconnexion">
+            <Icon className="w-4 h-4">
+              <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4" />
+              <polyline points="16 17 21 12 16 7" />
+              <line x1="21" y1="12" x2="9" y2="12" />
+            </Icon>
+          </button>
         </div>
       </div>
     </>

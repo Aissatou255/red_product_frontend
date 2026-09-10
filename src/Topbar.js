@@ -28,7 +28,13 @@ function Topbar({ title, searchValue, onSearchChange, showSearch, onLogout, onMe
             <div className="w-8 h-8 rounded-full bg-gray-300"></div>
             <span className="absolute bottom-0 right-0 w-2.5 h-2.5 bg-green-500 rounded-full border-2 border-white"></span>
           </div>
-          <span onClick={onLogout} className="text-gray-500 cursor-pointer hover:text-red-500" title="Déconnexion">⏻</span>
+          <span onClick={onLogout} className="text-gray-500 cursor-pointer hover:text-red-500" title="Déconnexion">
+  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="w-5 h-5">
+    <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4" />
+    <polyline points="16 17 21 12 16 7" />
+    <line x1="21" y1="12" x2="9" y2="12" />
+  </svg>
+</span>
         </div>
       </div>
 
