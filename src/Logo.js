@@ -3,10 +3,8 @@ function Logo({ dark = true }) {
   return (
     <div className={`flex items-center gap-2 font-bold ${dark ? 'text-white' : 'text-gray-800'}`}>
       <svg width="20" height="20" viewBox="0 0 24 24" fill="none">
-        <path
-          d="M5 21V5a2 2 0 0 1 2-2h13l-6 6 6 6H7"
-          fill={color}
-        />
+        <rect x="3" y="3" width="18" height="18" stroke={color} strokeWidth="1.5" />
+        <path d="M6 19 L10 9 L18 19 Z" fill={color} />
       </svg>
       RED PRODUCT
     </div>
