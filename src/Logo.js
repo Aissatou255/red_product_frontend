@@ -1,6 +1,6 @@
 import React from 'react';
 
-const Logo = ({ size = 40, dark }) => {
+const Logo = ({ size = 32, dark }) => {
   return (
     <svg
       width={size}
@@ -10,14 +10,8 @@ const Logo = ({ size = 40, dark }) => {
       xmlns="http://www.w3.org/2000/svg"
       style={{ flexShrink: 0 }}
     >
-      {/* Fond carré clair */}
-      <rect width="32" height="32" fill="#F1F1F1" />
-
-      {/* Bande diagonale claire (arrière-plan) */}
-      <path d="M20 4 L26 4 L14 28 L8 28 Z" fill="#D9D9D9" />
-
-      {/* Montagne foncée (premier plan) */}
-      <path d="M13 12 L22 28 L4 28 Z" fill="#4A4E54" />
+      {/* Juste la forme en biais, sans carré ni montagne */}
+      <path d="M20 4 L26 4 L12 28 L6 28 Z" fill="#E5E5E5" />
     </svg>
   );
 };
