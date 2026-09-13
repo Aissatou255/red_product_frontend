@@ -10,11 +10,8 @@ const Logo = ({ size = 32, dark }) => {
       xmlns="http://www.w3.org/2000/svg"
       style={{ flexShrink: 0 }}
     >
-      {/* Bande diagonale claire (arrière-plan) */}
-      <path d="M20 4 L26 4 L14 28 L8 28 Z" fill="#D9D9D9" />
-
-      {/* Montagne foncée (premier plan) */}
-      <path d="M13 12 L22 28 L4 28 Z" fill="#4A4E54" />
+      {/* Parallélogramme clair en biais */}
+      <path d="M20 4 L26 4 L12 28 L6 28 Z" fill="#E5E5E5" />
     </svg>
   );
 };
