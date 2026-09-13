@@ -24,7 +24,7 @@ function Sidebar({ currentPage, onNavigate, user, onLogout, open, onClose }) {
         ${open ? 'translate-x-0' : '-translate-x-full'} sm:translate-x-0`}
       >
         <div className="p-4 border-b border-neutral-600 flex items-center justify-between">
-          <Logo dark={true} />
+          <Logo size={40} dark={true} />
           <button onClick={onClose} className="sm:hidden text-white text-xl">✕</button>
         </div>
 
