@@ -1,4 +1,8 @@
 import Logo from './Logo';
+import axios from 'axios';
+
+const CLOUD_NAME = 'iyp1ap9k';
+const UPLOAD_PRESET = 'hotel_photo';
 
 function Icon({ children, className = "w-4 h-4" }) {
   return (
@@ -8,7 +12,28 @@ function Icon({ children, className = "w-4 h-4" }) {
   );
 }
 
-function Sidebar({ currentPage, onNavigate, user, onLogout, open, onClose }) {
+function Sidebar({ currentPage, onNavigate, user, onLogout, open, onClose, onUserPhotoChange }) {
+  const handlePhotoSelect = async (e) => {
+    const file = e.target.files[0];
+    if (!file) return;
+
+    try {
+      const data = new FormData();
+      data.append('file', file);
+      data.append('upload_preset', UPLOAD_PRESET);
+
+      const res = await axios.post(
+        `https://api.cloudinary.com/v1_1/${CLOUD_NAME}/image/upload`,
+        data
+      );
+
+      if (onUserPhotoChange) onUserPhotoChange(res.data.secure_url);
+    } catch (err) {
+      console.error(err);
+      alert("Erreur lors de l'envoi de la photo.");
+    }
+  };
+
   return (
     <>
       {open && (
@@ -73,20 +98,26 @@ function Sidebar({ currentPage, onNavigate, user, onLogout, open, onClose }) {
         </nav>
 
         <div className="p-4 border-t border-neutral-600 flex items-center gap-2 text-sm">
-          <div className="w-8 h-8 rounded-full bg-gray-400"></div>
+          <label className="relative w-8 h-8 flex-shrink-0 cursor-pointer group">
+            {user?.photo_url ? (
+              <img src={user.photo_url} alt="Profil" className="w-8 h-8 rounded-full object-cover" />
+            ) : (
+              <div className="w-8 h-8 rounded-full bg-gray-400"></div>
+            )}
+            <div className="absolute inset-0 rounded-full bg-black bg-opacity-0 group-hover:bg-opacity-40 transition-opacity flex items-center justify-center">
+              <svg viewBox="0 0 24 24" fill="none" stroke="white" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="w-3.5 h-3.5 opacity-0 group-hover:opacity-100">
+                <path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z" />
+                <circle cx="12" cy="13" r="4" />
+              </svg>
+            </div>
+            <input type="file" accept="image/*" onChange={handlePhotoSelect} className="hidden" />
+          </label>
           <div className="flex-1">
             <div>{user?.name}</div>
             <div className="text-green-400 text-xs flex items-center gap-1">
               <span className="w-2 h-2 bg-green-400 rounded-full inline-block"></span> en ligne
             </div>
           </div>
-          <button onClick={onLogout} className="text-gray-400 hover:text-white" title="Déconnexion">
-            <Icon className="w-4 h-4">
-              <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4" />
-              <polyline points="16 17 21 12 16 7" />
-              <line x1="21" y1="12" x2="9" y2="12" />
-            </Icon>
-          </button>
         </div>
       </div>
     </>

@@ -5,7 +5,7 @@ const CLOUD_NAME = 'iyp1ap9k';
 const UPLOAD_PRESET = 'hotel_photo';
 const API_URL = 'https://red-product-backend-qqo1.onrender.com';
 
-function AddHotel({ onHotelAdded, editingHotel }) {
+function AddHotel({ onHotelAdded, editingHotel, onClose }) {
   const [formData, setFormData] = useState({
     name: '',
     address: '',
@@ -15,8 +15,10 @@ function AddHotel({ onHotelAdded, editingHotel }) {
     currency: 'XOF',
   });
   const [photoFile, setPhotoFile] = useState(null);
+  const [photoPreview, setPhotoPreview] = useState(null);
   const [uploading, setUploading] = useState(false);
   const [error, setError] = useState(null);
+  const [fieldErrors, setFieldErrors] = useState({});
 
   useEffect(() => {
     if (editingHotel) {
@@ -28,18 +30,73 @@ function AddHotel({ onHotelAdded, editingHotel }) {
         price_per_night: editingHotel.price_per_night || '',
         currency: editingHotel.currency || 'XOF',
       });
+      if (editingHotel.photo_url) {
+        setPhotoPreview(editingHotel.photo_url);
+      }
     }
   }, [editingHotel]);
 
   const handleChange = (e) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
+    setFieldErrors({ ...fieldErrors, [e.target.name]: null });
+  };
+
+  const handlePhoneChange = (e) => {
+    const digitsOnly = e.target.value.replace(/[^0-9]/g, '');
+    setFormData({ ...formData, phone: digitsOnly });
+    setFieldErrors({ ...fieldErrors, phone: null });
+  };
+
+  const handlePriceChange = (e) => {
+    const digitsOnly = e.target.value.replace(/[^0-9]/g, '');
+    setFormData({ ...formData, price_per_night: digitsOnly });
+    setFieldErrors({ ...fieldErrors, price_per_night: null });
+  };
+
+  const handlePhotoChange = (e) => {
+    const file = e.target.files[0];
+    if (file) {
+      setPhotoFile(file);
+      setPhotoPreview(URL.createObjectURL(file));
+      setFieldErrors({ ...fieldErrors, photo: null });
+    }
+  };
+
+  const validate = () => {
+    const errors = {};
+
+    if (!formData.name.trim()) errors.name = "Le nom de l'hôtel est requis.";
+    if (!formData.address.trim()) errors.address = "L'adresse est requise.";
+
+    if (formData.email && !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(formData.email)) {
+      errors.email = "Format d'e-mail invalide.";
+    }
+
+    if (formData.phone && formData.phone.length < 8) {
+      errors.phone = "Le numéro doit contenir au moins 8 chiffres.";
+    }
+
+    if (!formData.price_per_night) {
+      errors.price_per_night = "Le prix par nuit est requis.";
+    } else if (Number(formData.price_per_night) <= 0) {
+      errors.price_per_night = "Le prix doit être supérieur à 0.";
+    }
+
+    if (!editingHotel && !photoFile) {
+      errors.photo = "Une photo est requise.";
+    }
+
+    setFieldErrors(errors);
+    return Object.keys(errors).length === 0;
   };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    setUploading(true);
     setError(null);
 
+    if (!validate()) return;
+
+    setUploading(true);
     try {
       let photo_url = editingHotel ? editingHotel.photo_url : null;
 
@@ -69,6 +126,8 @@ function AddHotel({ onHotelAdded, editingHotel }) {
 
       setFormData({ name: '', address: '', email: '', phone: '', price_per_night: '', currency: 'XOF' });
       setPhotoFile(null);
+      setPhotoPreview(null);
+      setFieldErrors({});
       if (onHotelAdded) onHotelAdded();
 
     } catch (err) {
@@ -80,47 +139,93 @@ function AddHotel({ onHotelAdded, editingHotel }) {
   };
 
   return (
-    <form onSubmit={handleSubmit} className="max-w-3xl mx-auto bg-white border rounded shadow-sm">
-      <div className="flex items-center gap-2 p-4 border-b">
-        <span className="text-gray-500">←</span>
-        <h2 className="font-semibold tracking-wide text-sm">
-          {editingHotel ? "MODIFIER L'HÔTEL" : 'CRÉER UN NOUVEAU HÔTEL'}
-        </h2>
+    <form onSubmit={handleSubmit} className="max-w-3xl mx-auto bg-white rounded-lg shadow-lg">
+      <div className="flex items-center justify-between gap-2 px-6 py-4 border-b border-dashed border-gray-300">
+        <div className="flex items-center gap-2">
+          {onClose && (
+            <button type="button" onClick={onClose} className="text-gray-500 hover:text-gray-700">←</button>
+          )}
+          <h2 className="font-semibold tracking-wide text-sm text-gray-700">
+            {editingHotel ? "MODIFIER L'HÔTEL" : 'CRÉER UN NOUVEAU HÔTEL'}
+          </h2>
+        </div>
+        {onClose && (
+          <button type="button" onClick={onClose} className="text-gray-400 hover:text-gray-600 text-xl leading-none">✕</button>
+        )}
       </div>
 
-      <div className="p-6 space-y-4">
+      <div className="p-6 space-y-5">
         {error && <p className="text-red-600 text-sm">{error}</p>}
 
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
           <div>
             <label className="block text-sm text-gray-600 mb-1">Nom de l'hôtel</label>
-            <input name="name" value={formData.name} onChange={handleChange} required className="w-full border rounded p-2" />
+            <input
+              name="name"
+              value={formData.name}
+              onChange={handleChange}
+              className={`w-full border rounded p-2 text-sm focus:outline-none focus:ring-1 focus:ring-gray-400 ${fieldErrors.name ? 'border-red-500' : 'border-gray-300'}`}
+            />
+            {fieldErrors.name && <p className="text-red-600 text-xs mt-1">{fieldErrors.name}</p>}
           </div>
           <div>
             <label className="block text-sm text-gray-600 mb-1">Adresse</label>
-            <input name="address" value={formData.address} onChange={handleChange} required className="w-full border rounded p-2" />
+            <input
+              name="address"
+              value={formData.address}
+              onChange={handleChange}
+              className={`w-full border rounded p-2 text-sm focus:outline-none focus:ring-1 focus:ring-gray-400 ${fieldErrors.address ? 'border-red-500' : 'border-gray-300'}`}
+            />
+            {fieldErrors.address && <p className="text-red-600 text-xs mt-1">{fieldErrors.address}</p>}
           </div>
         </div>
 
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
           <div>
             <label className="block text-sm text-gray-600 mb-1">E-mail</label>
-            <input name="email" value={formData.email} onChange={handleChange} className="w-full border rounded p-2" />
+            <input
+              name="email"
+              value={formData.email}
+              onChange={handleChange}
+              className={`w-full border rounded p-2 text-sm focus:outline-none focus:ring-1 focus:ring-gray-400 ${fieldErrors.email ? 'border-red-500' : 'border-gray-300'}`}
+            />
+            {fieldErrors.email && <p className="text-red-600 text-xs mt-1">{fieldErrors.email}</p>}
           </div>
           <div>
             <label className="block text-sm text-gray-600 mb-1">Numéro de téléphone</label>
-            <input name="phone" value={formData.phone} onChange={handleChange} className="w-full border rounded p-2" />
+            <input
+              name="phone"
+              type="text"
+              inputMode="numeric"
+              value={formData.phone}
+              onChange={handlePhoneChange}
+              className={`w-full border rounded p-2 text-sm focus:outline-none focus:ring-1 focus:ring-gray-400 ${fieldErrors.phone ? 'border-red-500' : 'border-gray-300'}`}
+            />
+            {fieldErrors.phone && <p className="text-red-600 text-xs mt-1">{fieldErrors.phone}</p>}
           </div>
         </div>
 
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
           <div>
             <label className="block text-sm text-gray-600 mb-1">Prix par nuit</label>
-            <input name="price_per_night" type="number" value={formData.price_per_night} onChange={handleChange} required className="w-full border rounded p-2" />
+            <input
+              name="price_per_night"
+              type="text"
+              inputMode="numeric"
+              value={formData.price_per_night}
+              onChange={handlePriceChange}
+              className={`w-full border rounded p-2 text-sm focus:outline-none focus:ring-1 focus:ring-gray-400 ${fieldErrors.price_per_night ? 'border-red-500' : 'border-gray-300'}`}
+            />
+            {fieldErrors.price_per_night && <p className="text-red-600 text-xs mt-1">{fieldErrors.price_per_night}</p>}
           </div>
           <div>
             <label className="block text-sm text-gray-600 mb-1">Devise</label>
-            <select name="currency" value={formData.currency} onChange={handleChange} className="w-full border rounded p-2">
+            <select
+              name="currency"
+              value={formData.currency}
+              onChange={handleChange}
+              className="w-full border border-gray-300 rounded p-2 text-sm focus:outline-none focus:ring-1 focus:ring-gray-400"
+            >
               <option value="XOF">F XOF</option>
               <option value="EUR">Euro</option>
               <option value="USD">Dollar</option>
@@ -130,15 +235,35 @@ function AddHotel({ onHotelAdded, editingHotel }) {
 
         <div>
           <label className="block text-sm text-gray-600 mb-1">Ajouter une photo</label>
-          <label className="flex flex-col items-center justify-center border-2 border-dashed rounded p-8 text-center text-gray-400 cursor-pointer hover:bg-gray-50">
-            <span className="text-3xl mb-2">🖼️</span>
-            <span className="text-sm">{photoFile ? photoFile.name : (editingHotel ? 'Changer la photo (optionnel)' : 'Ajouter une photo')}</span>
-            <input type="file" accept="image/*" onChange={(e) => setPhotoFile(e.target.files[0])} className="hidden" />
+          <label className={`flex flex-col items-center justify-center border-2 border-dashed rounded-lg h-40 text-center text-gray-400 cursor-pointer hover:bg-gray-50 overflow-hidden relative ${fieldErrors.photo ? 'border-red-500' : 'border-gray-300'}`}>
+            {photoPreview ? (
+              <>
+                <img src={photoPreview} alt="Aperçu" className="absolute inset-0 w-full h-full object-contain bg-gray-50" />
+                <div className="absolute inset-0 bg-black bg-opacity-0 hover:bg-opacity-30 transition-opacity flex items-center justify-center">
+                  <span className="opacity-0 hover:opacity-100 text-white text-xs font-medium">Changer la photo</span>
+                </div>
+              </>
+            ) : (
+              <>
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" className="w-8 h-8 mb-2 text-gray-300">
+                  <rect x="3" y="3" width="18" height="18" rx="2" />
+                  <circle cx="8.5" cy="8.5" r="1.5" />
+                  <path d="M21 15l-5-5L5 21" />
+                </svg>
+                <span className="text-sm">Ajouter une photo</span>
+              </>
+            )}
+            <input type="file" accept="image/*" onChange={handlePhotoChange} className="hidden" />
           </label>
+          {fieldErrors.photo && <p className="text-red-600 text-xs mt-1">{fieldErrors.photo}</p>}
         </div>
 
         <div className="flex justify-end pt-2">
-          <button type="submit" disabled={uploading} className="bg-gray-700 text-white px-6 py-2 rounded hover:bg-gray-600">
+          <button
+            type="submit"
+            disabled={uploading}
+            className="bg-gray-700 text-white px-6 py-2 rounded hover:bg-gray-600 text-sm"
+          >
             {uploading ? 'Enregistrement...' : 'Enregistrer'}
           </button>
         </div>
