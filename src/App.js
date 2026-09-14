@@ -99,7 +99,7 @@ function App() {
   }
 
   return (
-    <div className="flex h-screen overflow-hidden">
+    <div className="flex min-h-screen">
       <Sidebar
         currentPage={page}
         onNavigate={setPage}
@@ -110,8 +110,8 @@ function App() {
         onUserPhotoChange={handleUserPhotoChange}
       />
 
-      <div className="flex-1 min-w-0 flex flex-col h-screen">
-        <div className="flex-shrink-0">
+      <div className="flex-1 min-w-0 flex flex-col bg-gray-100 min-h-screen">
+        <div className="sticky top-0 z-20">
           <Topbar
             title={page === 'dashboard' ? 'Dashboard' : 'Liste des hôtels'}
             searchValue={search}
@@ -122,97 +122,83 @@ function App() {
             user={user}
             onUserPhotoChange={handleUserPhotoChange}
           />
-        </div>
-
-        <div className="flex-1 overflow-hidden bg-gray-100">
-          {page === 'dashboard' && (
-            <div className="h-full flex flex-col">
-              <div className="flex-shrink-0 bg-white px-6 py-4 border-b">
-                <h1 className="text-lg font-semibold">Bienvenue sur RED Product</h1>
-                <p className="text-xs text-gray-400 mt-0.5">Lorem ipsum dolor sit amet consectetur</p>
-              </div>
-              <div className="flex-1 overflow-y-auto">
-                <Dashboard hideHeader />
-              </div>
-            </div>
-          )}
 
           {page === 'hotels' && (
-            <div className="h-full flex flex-col">
-              <div className="flex-shrink-0 bg-white border-b">
-                <div className="p-4 sm:p-6 max-w-6xl mx-auto w-full">
-                  <div className="flex flex-col sm:flex-row sm:justify-between sm:items-center gap-3">
-                    <div>
-                      <p className="text-sm text-gray-500">Hôtels {filteredHotels.length}</p>
-                    </div>
-                    <button
-                      onClick={() => { setShowForm(true); setEditingHotel(null); }}
-                      className="bg-white border border-gray-300 text-black px-4 py-2 rounded hover:bg-gray-50 w-full sm:w-auto"
-                    >
-                      + Créer un nouvel hôtel
-                    </button>
+            <div className="bg-white border-b">
+              <div className="p-4 sm:p-6 max-w-6xl mx-auto w-full">
+                <div className="flex flex-col sm:flex-row sm:justify-between sm:items-center gap-3">
+                  <div>
+                    <p className="text-sm text-gray-500">Hôtels {filteredHotels.length}</p>
                   </div>
-                </div>
-              </div>
-
-              <div className="flex-1 overflow-y-auto">
-                <div className="p-4 sm:p-6 max-w-6xl mx-auto">
-                  {loading ? (
-                    <p className="text-center">Chargement...</p>
-                  ) : filteredHotels.length === 0 ? (
-                    <p className="text-gray-600">Aucun hôtel trouvé.</p>
-                  ) : (
-                    <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-4">
-                      {filteredHotels.map(hotel => (
-                        <div key={hotel.id} className="group rounded shadow-sm overflow-hidden bg-white">
-                          <div className="relative overflow-hidden">
-                            {hotel.photo_url && (
-                              <img src={hotel.photo_url} alt={hotel.name} className="w-full h-40 object-cover" />
-                            )}
-
-                            <div className="absolute bottom-0 left-0 right-0 bg-black bg-opacity-60 flex items-center justify-center gap-4 py-2 translate-y-full group-hover:translate-y-0 transition-transform duration-200">
-                              <button
-                                onClick={() => handleEdit(hotel)}
-                                className="text-white hover:text-gray-200 transition"
-                                title="Modifier"
-                              >
-                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="w-4 h-4">
-                                  <path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7" />
-                                  <path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z" />
-                                </svg>
-                              </button>
-                              <button
-                                onClick={() => handleDelete(hotel.id)}
-                                className="text-white hover:text-red-300 transition"
-                                title="Supprimer"
-                              >
-                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="w-4 h-4">
-                                  <polyline points="3 6 5 6 21 6" />
-                                  <path d="M19 6l-1 14a2 2 0 0 1-2 2H8a2 2 0 0 1-2-2L5 6" />
-                                  <path d="M10 11v6" />
-                                  <path d="M14 11v6" />
-                                  <path d="M9 6V4a1 1 0 0 1 1-1h4a1 1 0 0 1 1 1v2" />
-                                </svg>
-                              </button>
-                            </div>
-                          </div>
-
-                          <div className="p-3">
-                            <p className="text-sm text-orange-700">{hotel.address}</p>
-                            <h3 className="font-bold text-lg">{hotel.name}</h3>
-                            <p className="mt-1 text-gray-700">
-                              {Number(hotel.price_per_night).toLocaleString('fr-FR')} {hotel.currency} par nuit
-                            </p>
-                          </div>
-                        </div>
-                      ))}
-                    </div>
-                  )}
+                  <button
+                    onClick={() => { setShowForm(true); setEditingHotel(null); }}
+                    className="bg-white border border-gray-300 text-black px-4 py-2 rounded hover:bg-gray-50 w-full sm:w-auto"
+                  >
+                    + Créer un nouvel hôtel
+                  </button>
                 </div>
               </div>
             </div>
           )}
         </div>
+
+        {page === 'dashboard' && <Dashboard hideHeader />}
+
+        {page === 'hotels' && (
+          <div className="p-4 sm:p-6 max-w-6xl mx-auto w-full">
+            {loading ? (
+              <p className="text-center">Chargement...</p>
+            ) : filteredHotels.length === 0 ? (
+              <p className="text-gray-600">Aucun hôtel trouvé.</p>
+            ) : (
+              <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-3 sm:gap-4">
+                {filteredHotels.map(hotel => (
+                  <div key={hotel.id} className="group rounded shadow-sm overflow-hidden bg-white">
+                    <div className="relative overflow-hidden">
+                      {hotel.photo_url && (
+                        <img src={hotel.photo_url} alt={hotel.name} className="w-full h-32 sm:h-40 object-cover" />
+                      )}
+
+                      <div className="absolute bottom-0 left-0 right-0 bg-black bg-opacity-60 flex items-center justify-center gap-4 py-2 translate-y-full group-hover:translate-y-0 transition-transform duration-200">
+                        <button
+                          onClick={() => handleEdit(hotel)}
+                          className="text-white hover:text-gray-200 transition"
+                          title="Modifier"
+                        >
+                          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="w-4 h-4">
+                            <path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7" />
+                            <path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z" />
+                          </svg>
+                        </button>
+                        <button
+                          onClick={() => handleDelete(hotel.id)}
+                          className="text-white hover:text-red-300 transition"
+                          title="Supprimer"
+                        >
+                          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="w-4 h-4">
+                            <polyline points="3 6 5 6 21 6" />
+                            <path d="M19 6l-1 14a2 2 0 0 1-2 2H8a2 2 0 0 1-2-2L5 6" />
+                            <path d="M10 11v6" />
+                            <path d="M14 11v6" />
+                            <path d="M9 6V4a1 1 0 0 1 1-1h4a1 1 0 0 1 1 1v2" />
+                          </svg>
+                        </button>
+                      </div>
+                    </div>
+
+                    <div className="p-2 sm:p-3">
+                      <p className="text-xs sm:text-sm text-orange-700">{hotel.address}</p>
+                      <h3 className="font-bold text-sm sm:text-lg">{hotel.name}</h3>
+                      <p className="mt-1 text-xs sm:text-base text-gray-700">
+                        {Number(hotel.price_per_night).toLocaleString('fr-FR')} {hotel.currency} par nuit
+                      </p>
+                    </div>
+                  </div>
+                ))}
+              </div>
+            )}
+          </div>
+        )}
       </div>
 
       {showForm && (
