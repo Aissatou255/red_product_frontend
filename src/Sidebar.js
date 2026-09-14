@@ -4,10 +4,26 @@ import axios from 'axios';
 const CLOUD_NAME = 'iyp1ap9k';
 const UPLOAD_PRESET = 'hotel_photo';
 
-function Icon({ children, className = "w-4 h-4" }) {
+function DashboardIcon({ className = "w-5 h-5" }) {
   return (
-    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className={className}>
-      {children}
+    <svg viewBox="0 0 24 24" fill="currentColor" className={className}>
+      <rect x="3" y="3" width="7" height="7" rx="1" />
+      <rect x="14" y="3" width="7" height="4" rx="1" />
+      <rect x="14" y="9" width="7" height="12" rx="1" />
+      <rect x="3" y="12" width="7" height="9" rx="1" />
+    </svg>
+  );
+}
+
+function HotelIcon({ className = "w-5 h-5" }) {
+  return (
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round" className={className}>
+      <rect x="3" y="3" width="18" height="11" rx="1.5" />
+      <line x1="7" y1="7" x2="13" y2="7" />
+      <rect x="16" y="6" width="2" height="2" fill="currentColor" stroke="none" />
+      <rect x="16" y="9" width="2" height="2" fill="currentColor" stroke="none" />
+      <circle cx="12" cy="16" r="2.2" fill="currentColor" stroke="none" />
+      <path d="M8.5 21c0-2.5 1.7-4.2 3.5-4.2s3.5 1.7 3.5 4.2" />
     </svg>
   );
 }
@@ -44,9 +60,10 @@ function Sidebar({ currentPage, onNavigate, user, onLogout, open, onClose, onUse
       )}
 
       <div
-        className={`fixed sm:static top-0 left-0 h-full sm:h-auto sm:min-h-screen w-56 bg-neutral-700 text-white flex flex-col z-40
-        transform transition-transform duration-200
+        className={`fixed sm:static top-0 left-0 h-full sm:h-auto sm:min-h-screen w-56 text-white flex flex-col z-40
+        transform transition-transform duration-200 bg-cover bg-center relative
         ${open ? 'translate-x-0' : '-translate-x-full'} sm:translate-x-0`}
+        style={{ backgroundImage: "linear-gradient(rgba(55,60,66,0.9), rgba(55,60,66,0.9)), url('/sidebar-bg.jpg')" }}
       >
         <div className="p-4 border-b border-neutral-600 flex items-center justify-between">
           <div className="flex items-center gap-2">
@@ -63,36 +80,24 @@ function Sidebar({ currentPage, onNavigate, user, onLogout, open, onClose, onUse
         <nav className="flex-1 px-2 space-y-1">
           <button
             onClick={() => { onNavigate('dashboard'); onClose(); }}
-            className={`w-full flex items-center gap-3 text-left pl-3 pr-3 py-2 text-sm border-l-4 ${
+            className={`w-full flex items-center gap-3 text-left pl-3 pr-3 py-2.5 text-sm rounded ${
               currentPage === 'dashboard'
-                ? 'bg-neutral-600 border-white'
-                : 'border-transparent hover:bg-neutral-600'
+                ? 'bg-white text-neutral-800 font-medium'
+                : 'text-white hover:bg-neutral-600'
             }`}
           >
-            <Icon>
-              <rect x="3" y="3" width="8" height="8" rx="1" />
-              <rect x="13" y="3" width="8" height="8" rx="1" />
-              <rect x="3" y="13" width="8" height="8" rx="1" />
-              <rect x="13" y="13" width="8" height="8" rx="1" />
-            </Icon>
+            <DashboardIcon className="w-5 h-5 flex-shrink-0" />
             Dashboard
           </button>
           <button
             onClick={() => { onNavigate('hotels'); onClose(); }}
-            className={`w-full flex items-center gap-3 text-left pl-3 pr-3 py-2 text-sm border-l-4 ${
+            className={`w-full flex items-center gap-3 text-left pl-3 pr-3 py-2.5 text-sm rounded ${
               currentPage === 'hotels'
-                ? 'bg-neutral-600 border-white'
-                : 'border-transparent hover:bg-neutral-600'
+                ? 'bg-white text-neutral-800 font-medium'
+                : 'text-white hover:bg-neutral-600'
             }`}
           >
-            <Icon>
-              <rect x="3" y="3" width="18" height="11" rx="1" />
-              <line x1="7" y1="7" x2="13" y2="7" />
-              <rect x="16" y="6" width="2" height="2" />
-              <rect x="16" y="9" width="2" height="2" />
-              <circle cx="12" cy="15" r="2" />
-              <path d="M9 21c0-2.5 1.5-4 3-4s3 1.5 3 4" />
-            </Icon>
+            <HotelIcon className="w-5 h-5 flex-shrink-0" />
             Liste des hôtels
           </button>
         </nav>

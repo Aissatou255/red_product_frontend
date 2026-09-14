@@ -126,8 +126,14 @@ function App() {
 
         <div className="flex-1 overflow-hidden bg-gray-100">
           {page === 'dashboard' && (
-            <div className="h-full overflow-y-auto">
-              <Dashboard />
+            <div className="h-full flex flex-col">
+              <div className="flex-shrink-0 bg-white px-6 py-4 border-b">
+                <h1 className="text-lg font-semibold">Bienvenue sur RED Product</h1>
+                <p className="text-xs text-gray-400 mt-0.5">Lorem ipsum dolor sit amet consectetur</p>
+              </div>
+              <div className="flex-1 overflow-y-auto">
+                <Dashboard hideHeader />
+              </div>
             </div>
           )}
 
