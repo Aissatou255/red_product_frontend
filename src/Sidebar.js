@@ -52,12 +52,12 @@ function Sidebar({ currentPage, onNavigate, user, onLogout, open, onClose, onUse
       )}
 
       <div
-        className={`fixed sm:static top-0 left-0 h-full sm:h-auto sm:min-h-screen w-56 text-white flex flex-col z-40
-        transform transition-transform duration-200 bg-cover bg-center relative
+        className={`fixed top-0 left-0 h-screen w-56 text-white flex flex-col z-40
+        transform transition-transform duration-200 bg-cover bg-center
         ${open ? 'translate-x-0' : '-translate-x-full'} sm:translate-x-0`}
         style={{ backgroundImage: "linear-gradient(rgba(85,89,92,0.9), rgba(85,89,92,0.9)), url('/sidebar-bg.jpg')" }}
       >
-        <div className="p-4 border-b border-neutral-600 flex items-center justify-between">
+        <div className="p-4 border-b border-neutral-600 flex items-center justify-between flex-shrink-0">
           <div className="flex items-center gap-2">
             <Logo size={28} dark={true} />
             <span className="font-bold text-white tracking-wide text-sm uppercase">
@@ -67,9 +67,9 @@ function Sidebar({ currentPage, onNavigate, user, onLogout, open, onClose, onUse
           <button onClick={onClose} className="sm:hidden text-white text-xl">✕</button>
         </div>
 
-        <div className="px-4 pt-4 pb-2 text-xs text-gray-400 uppercase tracking-wide">Principal</div>
+        <div className="px-4 pt-4 pb-2 text-xs text-gray-400 uppercase tracking-wide flex-shrink-0">Principal</div>
 
-        <nav className="flex-1 px-2 space-y-1">
+        <nav className="flex-1 px-2 space-y-1 overflow-y-auto">
           <button
             onClick={() => { onNavigate('dashboard'); onClose(); }}
             className={`w-full flex items-center gap-3 text-left pl-3 pr-3 py-2.5 text-sm rounded ${
@@ -96,7 +96,7 @@ function Sidebar({ currentPage, onNavigate, user, onLogout, open, onClose, onUse
           </button>
         </nav>
 
-        <div className="p-4 border-t border-neutral-600 flex items-center gap-2 text-sm">
+        <div className="p-4 border-t border-neutral-600 flex items-center gap-2 text-sm flex-shrink-0">
           <label className="relative w-8 h-8 flex-shrink-0 cursor-pointer group">
             {user?.photo_url ? (
               <img src={user.photo_url} alt="Profil" className="w-8 h-8 rounded-full object-cover" />
