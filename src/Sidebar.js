@@ -44,10 +44,9 @@ function Sidebar({ currentPage, onNavigate, user, onLogout, open, onClose, onUse
       )}
 
       <div
-        className={`fixed sm:static top-0 left-0 h-full sm:h-auto sm:min-h-screen w-56 text-white flex flex-col z-40
-        transform transition-transform duration-200 bg-cover bg-center relative
+        className={`fixed sm:static top-0 left-0 h-full sm:h-auto sm:min-h-screen w-56 bg-neutral-700 text-white flex flex-col z-40
+        transform transition-transform duration-200
         ${open ? 'translate-x-0' : '-translate-x-full'} sm:translate-x-0`}
-        style={{ backgroundImage: "linear-gradient(rgba(55,60,66,0.9), rgba(55,60,66,0.9)), url('/sidebar-bg.jpg')" }}
       >
         <div className="p-4 border-b border-neutral-600 flex items-center justify-between">
           <div className="flex items-center gap-2">
