@@ -30,26 +30,27 @@ function Register({ onRegister, onSwitchToLogin }) {
   return (
     <div
       className="min-h-screen bg-cover bg-center flex items-center justify-center"
-      style={{ backgroundImage: "linear-gradient(rgba(55,60,66,0.88), rgba(55,60,66,0.88)), url('/pattern-bg.jpg')" }}
+      style={{ backgroundImage: "linear-gradient(rgba(73,76,79,0.93), rgba(73,76,79,0.93)), url('/pattern-bg.jpg')" }}
     >
       <div className="w-full max-w-sm">
-        <div className="flex items-center justify-center mb-6">
-          <Logo dark={true} />
+        <div className="flex items-center justify-center gap-2 mb-6">
+          <Logo size={28} dark={true} />
+          <span className="font-bold text-white tracking-wide text-lg uppercase">Red Product</span>
         </div>
 
-        <div className="bg-white rounded shadow-lg p-8">
-          <p className="text-sm text-gray-600 mb-4">Inscrivez-vous en tant qu'Admin</p>
+        <div className="bg-white rounded p-8">
+          <p className="text-sm text-gray-800 mb-6">Inscrivez-vous en tant que Admin</p>
 
           {error && <p className="text-red-600 text-sm mb-3">{error}</p>}
 
-          <form onSubmit={handleSubmit} className="space-y-3">
+          <form onSubmit={handleSubmit} className="space-y-5">
             <input
               type="text"
               placeholder="Nom"
               value={name}
               onChange={(e) => setName(e.target.value)}
               required
-              className="w-full border-b p-2 text-sm focus:outline-none"
+              className="w-full border-b border-gray-300 p-2 text-sm focus:outline-none focus:border-gray-500"
             />
             <input
               type="email"
@@ -57,7 +58,7 @@ function Register({ onRegister, onSwitchToLogin }) {
               value={email}
               onChange={(e) => setEmail(e.target.value)}
               required
-              className="w-full border-b p-2 text-sm focus:outline-none"
+              className="w-full border-b border-gray-300 p-2 text-sm focus:outline-none focus:border-gray-500"
             />
             <input
               type="password"
@@ -65,24 +66,25 @@ function Register({ onRegister, onSwitchToLogin }) {
               value={password}
               onChange={(e) => setPassword(e.target.value)}
               required
-              className="w-full border-b p-2 text-sm focus:outline-none"
+              className="w-full border-b border-gray-300 p-2 text-sm focus:outline-none focus:border-gray-500"
             />
-            <label className="flex items-center gap-2 text-sm text-gray-600">
-              <input type="checkbox" required /> Accepter les termes et la politique
+            <label className="flex items-center gap-2 text-sm text-gray-700 pt-1">
+              <input type="checkbox" required className="w-5 h-5 border-gray-400 rounded-sm" /> Accepter les termes et la politique
             </label>
             <button
               type="submit"
               disabled={loading}
-              className="w-full bg-gray-800 text-white py-2 rounded hover:bg-gray-700 text-sm"
+              className="w-full text-white py-3 rounded text-sm font-bold"
+              style={{ backgroundColor: '#45484B' }}
             >
               {loading ? 'Inscription...' : "S'inscrire"}
             </button>
           </form>
         </div>
 
-        <p className="text-center text-sm mt-4">
-          Vous avez déjà un compte ?{' '}
-          <button onClick={onSwitchToLogin} className="text-yellow-600 font-medium">
+        <p className="text-center text-sm mt-4 text-white">
+          Vous avez déjà un compte?{' '}
+          <button onClick={onSwitchToLogin} className="text-yellow-500 font-bold">
             Se connecter
           </button>
         </p>
