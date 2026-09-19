@@ -7,6 +7,8 @@ import Topbar from './Topbar';
 import Login from './Login';
 import Register from './Register';
 import ForgotPassword from './ForgotPassword';
+import ToastContainer from './Toast';
+import HotelDetailsModal from './HotelDetailsModal';
 
 const API_URL = 'https://red-product-backend-qqo1.onrender.com';
 
@@ -22,8 +24,19 @@ function App() {
   const [loading, setLoading] = useState(true);
   const [showForm, setShowForm] = useState(false);
   const [editingHotel, setEditingHotel] = useState(null);
+  const [viewingHotel, setViewingHotel] = useState(null);
   const [search, setSearch] = useState('');
   const [sidebarOpen, setSidebarOpen] = useState(false);
+  const [toasts, setToasts] = useState([]);
+
+  const addToast = (message, type = 'success') => {
+    const id = Date.now() + Math.random();
+    setToasts((prev) => [...prev, { id, message, type }]);
+  };
+
+  const removeToast = (id) => {
+    setToasts((prev) => prev.filter((t) => t.id !== id));
+  };
 
   const fetchHotels = useCallback(() => {
     setLoading(true);
@@ -53,9 +66,10 @@ function App() {
     try {
       await axios.delete(`${API_URL}/api/hotels/${id}`);
       fetchHotels();
+      addToast('Hôtel supprimé avec succès !', 'success');
     } catch (err) {
       console.error(err);
-      alert("Erreur lors de la suppression.");
+      addToast("Erreur lors de la suppression de l'hôtel.", 'error');
     }
   };
 
@@ -100,6 +114,8 @@ function App() {
 
   return (
     <div className="min-h-screen">
+      <ToastContainer toasts={toasts} removeToast={removeToast} />
+
       <Sidebar
         currentPage={page}
         onNavigate={setPage}
@@ -156,10 +172,25 @@ function App() {
                   <div key={hotel.id} className="group rounded shadow-sm overflow-hidden bg-white">
                     <div className="relative overflow-hidden">
                       {hotel.photo_url && (
-                        <img src={hotel.photo_url} alt={hotel.name} className="w-full h-32 sm:h-40 object-cover" />
+                        <img
+                          src={hotel.photo_url}
+                          alt={hotel.name}
+                          className="w-full h-32 sm:h-40 object-cover cursor-pointer"
+                          onClick={() => setViewingHotel(hotel)}
+                        />
                       )}
 
                       <div className="absolute bottom-0 left-0 right-0 bg-black bg-opacity-60 flex items-center justify-center gap-4 py-2 translate-y-full group-hover:translate-y-0 transition-transform duration-200">
+                        <button
+                          onClick={() => setViewingHotel(hotel)}
+                          className="text-white hover:text-gray-200 transition"
+                          title="Voir les informations"
+                        >
+                          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="w-4 h-4">
+                            <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z" />
+                            <circle cx="12" cy="12" r="3" />
+                          </svg>
+                        </button>
                         <button
                           onClick={() => handleEdit(hotel)}
                           className="text-white hover:text-gray-200 transition"
@@ -211,12 +242,22 @@ function App() {
             onClick={(e) => e.stopPropagation()}
           >
             <AddHotel
-              onHotelAdded={() => { fetchHotels(); closeModal(); }}
+              onHotelAdded={() => {
+                const wasEditing = !!editingHotel;
+                fetchHotels();
+                closeModal();
+                addToast(wasEditing ? 'Hôtel modifié avec succès !' : 'Hôtel ajouté avec succès !', 'success');
+              }}
+              onError={() => addToast("Une erreur est survenue lors de l'enregistrement.", 'error')}
               editingHotel={editingHotel}
               onClose={closeModal}
             />
           </div>
         </div>
+      )}
+
+      {viewingHotel && (
+        <HotelDetailsModal hotel={viewingHotel} onClose={() => setViewingHotel(null)} />
       )}
     </div>
   );

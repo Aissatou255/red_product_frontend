@@ -5,7 +5,13 @@ const CLOUD_NAME = 'iyp1ap9k';
 const UPLOAD_PRESET = 'hotel_photo';
 const API_URL = 'https://red-product-backend-qqo1.onrender.com';
 
-function AddHotel({ onHotelAdded, editingHotel, onClose }) {
+const NAME_MAX = 60;
+const ADDRESS_MAX = 100;
+const EMAIL_MAX = 100;
+const PHONE_MAX = 15;
+const PRICE_MAX = 10;
+
+function AddHotel({ onHotelAdded, editingHotel, onClose, onError }) {
   const [formData, setFormData] = useState({
     name: '',
     address: '',
@@ -37,18 +43,20 @@ function AddHotel({ onHotelAdded, editingHotel, onClose }) {
   }, [editingHotel]);
 
   const handleChange = (e) => {
-    setFormData({ ...formData, [e.target.name]: e.target.value });
-    setFieldErrors({ ...fieldErrors, [e.target.name]: null });
+    const { name, value, maxLength } = e.target;
+    const trimmed = maxLength && maxLength > 0 ? value.slice(0, maxLength) : value;
+    setFormData({ ...formData, [name]: trimmed });
+    setFieldErrors({ ...fieldErrors, [name]: null });
   };
 
   const handlePhoneChange = (e) => {
-    const digitsOnly = e.target.value.replace(/[^0-9]/g, '');
+    const digitsOnly = e.target.value.replace(/[^0-9]/g, '').slice(0, PHONE_MAX);
     setFormData({ ...formData, phone: digitsOnly });
     setFieldErrors({ ...fieldErrors, phone: null });
   };
 
   const handlePriceChange = (e) => {
-    const digitsOnly = e.target.value.replace(/[^0-9]/g, '');
+    const digitsOnly = e.target.value.replace(/[^0-9]/g, '').slice(0, PRICE_MAX);
     setFormData({ ...formData, price_per_night: digitsOnly });
     setFieldErrors({ ...fieldErrors, price_per_night: null });
   };
@@ -133,6 +141,7 @@ function AddHotel({ onHotelAdded, editingHotel, onClose }) {
     } catch (err) {
       console.error(err);
       setError("Erreur lors de l'enregistrement de l'hôtel.");
+      if (onError) onError();
     } finally {
       setUploading(false);
     }
@@ -164,9 +173,15 @@ function AddHotel({ onHotelAdded, editingHotel, onClose }) {
               name="name"
               value={formData.name}
               onChange={handleChange}
+              maxLength={NAME_MAX}
               className={`w-full border rounded p-2 text-sm focus:outline-none focus:ring-1 focus:ring-gray-400 ${fieldErrors.name ? 'border-red-500' : 'border-gray-300'}`}
             />
-            {fieldErrors.name && <p className="text-red-600 text-xs mt-1">{fieldErrors.name}</p>}
+            <div className="flex justify-between items-center mt-1">
+              {fieldErrors.name ? (
+                <p className="text-red-600 text-xs">{fieldErrors.name}</p>
+              ) : <span />}
+              <span className="text-xs text-gray-400">{formData.name.length}/{NAME_MAX}</span>
+            </div>
           </div>
           <div>
             <label className="block text-sm text-gray-600 mb-1">Adresse</label>
@@ -174,9 +189,15 @@ function AddHotel({ onHotelAdded, editingHotel, onClose }) {
               name="address"
               value={formData.address}
               onChange={handleChange}
+              maxLength={ADDRESS_MAX}
               className={`w-full border rounded p-2 text-sm focus:outline-none focus:ring-1 focus:ring-gray-400 ${fieldErrors.address ? 'border-red-500' : 'border-gray-300'}`}
             />
-            {fieldErrors.address && <p className="text-red-600 text-xs mt-1">{fieldErrors.address}</p>}
+            <div className="flex justify-between items-center mt-1">
+              {fieldErrors.address ? (
+                <p className="text-red-600 text-xs">{fieldErrors.address}</p>
+              ) : <span />}
+              <span className="text-xs text-gray-400">{formData.address.length}/{ADDRESS_MAX}</span>
+            </div>
           </div>
         </div>
 
@@ -187,6 +208,7 @@ function AddHotel({ onHotelAdded, editingHotel, onClose }) {
               name="email"
               value={formData.email}
               onChange={handleChange}
+              maxLength={EMAIL_MAX}
               className={`w-full border rounded p-2 text-sm focus:outline-none focus:ring-1 focus:ring-gray-400 ${fieldErrors.email ? 'border-red-500' : 'border-gray-300'}`}
             />
             {fieldErrors.email && <p className="text-red-600 text-xs mt-1">{fieldErrors.email}</p>}
@@ -199,6 +221,7 @@ function AddHotel({ onHotelAdded, editingHotel, onClose }) {
               inputMode="numeric"
               value={formData.phone}
               onChange={handlePhoneChange}
+              maxLength={PHONE_MAX}
               className={`w-full border rounded p-2 text-sm focus:outline-none focus:ring-1 focus:ring-gray-400 ${fieldErrors.phone ? 'border-red-500' : 'border-gray-300'}`}
             />
             {fieldErrors.phone && <p className="text-red-600 text-xs mt-1">{fieldErrors.phone}</p>}
@@ -214,6 +237,7 @@ function AddHotel({ onHotelAdded, editingHotel, onClose }) {
               inputMode="numeric"
               value={formData.price_per_night}
               onChange={handlePriceChange}
+              maxLength={PRICE_MAX}
               className={`w-full border rounded p-2 text-sm focus:outline-none focus:ring-1 focus:ring-gray-400 ${fieldErrors.price_per_night ? 'border-red-500' : 'border-gray-300'}`}
             />
             {fieldErrors.price_per_night && <p className="text-red-600 text-xs mt-1">{fieldErrors.price_per_night}</p>}

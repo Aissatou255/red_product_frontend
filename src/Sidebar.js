@@ -52,69 +52,75 @@ function Sidebar({ currentPage, onNavigate, user, onLogout, open, onClose, onUse
       )}
 
       <div
-        className={`fixed top-0 left-0 h-screen w-56 text-white flex flex-col z-40
-        transform transition-transform duration-200 bg-cover bg-center
+        className={`fixed top-0 left-0 h-screen w-56 text-white flex flex-col z-40 bg-[#45484B]
+        transform transition-transform duration-200
         ${open ? 'translate-x-0' : '-translate-x-full'} sm:translate-x-0`}
-        style={{ backgroundImage: "linear-gradient(rgba(85,89,92,0.9), rgba(85,89,92,0.9)), url('/sidebar-bg.jpg')" }}
       >
-        <div className="p-4 border-b border-neutral-600 flex items-center justify-between flex-shrink-0">
-          <div className="flex items-center gap-2">
-            <Logo size={28} dark={true} />
-            <span className="font-bold text-white tracking-wide text-sm uppercase">
-              Red Product
-            </span>
-          </div>
-          <button onClick={onClose} className="sm:hidden text-white text-xl">✕</button>
-        </div>
+        <div
+          className="absolute inset-0 bg-cover bg-center"
+          style={{ backgroundImage: "linear-gradient(rgba(69,72,75,0.7), rgba(69,72,75,0.7)), url('/pattern-bg.jpg')" }}
+        ></div>
 
-        <div className="px-4 pt-4 pb-2 text-xs text-gray-400 uppercase tracking-wide flex-shrink-0">Principal</div>
-
-        <nav className="flex-1 px-2 space-y-1 overflow-y-auto">
-          <button
-            onClick={() => { onNavigate('dashboard'); onClose(); }}
-            className={`w-full flex items-center gap-3 text-left pl-3 pr-3 py-2.5 text-sm rounded ${
-              currentPage === 'dashboard'
-                ? 'bg-white font-medium'
-                : 'text-white hover:bg-neutral-600'
-            }`}
-            style={currentPage === 'dashboard' ? { color: '#4D5154' } : undefined}
-          >
-            <DashboardIcon className="w-5 h-5 flex-shrink-0" />
-            Dashboard
-          </button>
-          <button
-            onClick={() => { onNavigate('hotels'); onClose(); }}
-            className={`w-full flex items-center gap-3 text-left pl-3 pr-3 py-2.5 text-sm rounded ${
-              currentPage === 'hotels'
-                ? 'bg-white font-medium'
-                : 'text-white hover:bg-neutral-600'
-            }`}
-            style={currentPage === 'hotels' ? { color: '#4D5154' } : undefined}
-          >
-            <HotelIcon className="w-5 h-5 flex-shrink-0" />
-            Liste des hôtels
-          </button>
-        </nav>
-
-        <div className="p-4 border-t border-neutral-600 flex items-center gap-2 text-sm flex-shrink-0">
-          <label className="relative w-8 h-8 flex-shrink-0 cursor-pointer group">
-            {user?.photo_url ? (
-              <img src={user.photo_url} alt="Profil" className="w-8 h-8 rounded-full object-cover" />
-            ) : (
-              <div className="w-8 h-8 rounded-full bg-gray-400"></div>
-            )}
-            <div className="absolute inset-0 rounded-full bg-black bg-opacity-0 group-hover:bg-opacity-40 transition-opacity flex items-center justify-center">
-              <svg viewBox="0 0 24 24" fill="none" stroke="white" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="w-3.5 h-3.5 opacity-0 group-hover:opacity-100">
-                <path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z" />
-                <circle cx="12" cy="13" r="4" />
-              </svg>
+        <div className="relative z-10 flex flex-col h-full">
+          <div className="p-4 border-b border-neutral-600 flex items-center justify-between flex-shrink-0">
+            <div className="flex items-center gap-2">
+              <Logo size={28} dark={true} />
+              <span className="font-bold text-white tracking-wide text-sm uppercase">
+                Red Product
+              </span>
             </div>
-            <input type="file" accept="image/*" onChange={handlePhotoSelect} className="hidden" />
-          </label>
-          <div className="flex-1">
-            <div>{user?.name}</div>
-            <div className="text-green-400 text-xs flex items-center gap-1">
-              <span className="w-2 h-2 bg-green-400 rounded-full inline-block"></span> en ligne
+            <button onClick={onClose} className="sm:hidden text-white text-xl">✕</button>
+          </div>
+
+          <div className="px-4 pt-4 pb-2 text-xs text-gray-400 uppercase tracking-wide flex-shrink-0">Principal</div>
+
+          <nav className="flex-1 py-1 space-y-1 overflow-y-auto">
+            <button
+              onClick={() => { onNavigate('dashboard'); onClose(); }}
+              className={`w-full flex items-center gap-3 text-left pl-6 pr-4 py-2.5 text-sm ${
+                currentPage === 'dashboard'
+                  ? 'bg-white font-medium'
+                  : 'text-white hover:bg-neutral-600'
+              }`}
+              style={currentPage === 'dashboard' ? { color: '#4D5154' } : undefined}
+            >
+              <DashboardIcon className="w-5 h-5 flex-shrink-0" />
+              Dashboard
+            </button>
+            <button
+              onClick={() => { onNavigate('hotels'); onClose(); }}
+              className={`w-full flex items-center gap-3 text-left pl-6 pr-4 py-2.5 text-sm ${
+                currentPage === 'hotels'
+                  ? 'bg-white font-medium'
+                  : 'text-white hover:bg-neutral-600'
+              }`}
+              style={currentPage === 'hotels' ? { color: '#4D5154' } : undefined}
+            >
+              <HotelIcon className="w-5 h-5 flex-shrink-0" />
+              Liste des hôtels
+            </button>
+          </nav>
+
+          <div className="p-4 border-t border-neutral-600 flex items-center gap-2 text-sm flex-shrink-0">
+            <label className="relative w-8 h-8 flex-shrink-0 cursor-pointer group">
+              {user?.photo_url ? (
+                <img src={user.photo_url} alt="Profil" className="w-8 h-8 rounded-full object-cover" />
+              ) : (
+                <div className="w-8 h-8 rounded-full bg-gray-400"></div>
+              )}
+              <div className="absolute inset-0 rounded-full bg-black bg-opacity-0 group-hover:bg-opacity-40 transition-opacity flex items-center justify-center">
+                <svg viewBox="0 0 24 24" fill="none" stroke="white" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="w-3.5 h-3.5 opacity-0 group-hover:opacity-100">
+                  <path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z" />
+                  <circle cx="12" cy="13" r="4" />
+                </svg>
+              </div>
+              <input type="file" accept="image/*" onChange={handlePhotoSelect} className="hidden" />
+            </label>
+            <div className="flex-1">
+              <div>{user?.name}</div>
+              <div className="text-green-400 text-xs flex items-center gap-1">
+                <span className="w-2 h-2 bg-green-400 rounded-full inline-block"></span> en ligne
+              </div>
             </div>
           </div>
         </div>

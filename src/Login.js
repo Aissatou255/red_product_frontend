@@ -59,9 +59,17 @@ function Login({ onLogin, onSwitchToRegister, onSwitchToForgot }) {
               required
               className="w-full border-b border-gray-300 p-2 text-sm focus:outline-none focus:border-gray-500"
             />
-            <label className="flex items-center gap-2 text-sm text-gray-700 pt-1">
-              <input type="checkbox" className="w-5 h-5 border-gray-400 rounded-sm" /> Gardez-moi connecté
-            </label>
+
+            <div className="flex justify-end">
+              <button
+                type="button"
+                onClick={onSwitchToForgot}
+                className="text-xs text-gray-500 hover:text-gray-700"
+              >
+                Mot de passe oublié ?
+              </button>
+            </div>
+
             <button
               type="submit"
               disabled={loading}
@@ -73,13 +81,8 @@ function Login({ onLogin, onSwitchToRegister, onSwitchToForgot }) {
           </form>
         </div>
 
-        <p className="text-center text-sm mt-4">
-          <button onClick={onSwitchToForgot} className="text-yellow-500 font-bold">
-            Mot de passe oublié?
-          </button>
-        </p>
-        <p className="text-center text-sm mt-2 text-white">
-          Vous n'avez pas de compte?{' '}
+        <p className="text-center text-sm mt-4 text-white">
+          Pas encore de compte ?{' '}
           <button onClick={onSwitchToRegister} className="text-yellow-500 font-bold">
             S'inscrire
           </button>
